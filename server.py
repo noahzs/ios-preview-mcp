@@ -148,8 +148,9 @@ def list_simulators() -> str:
         Formatted list of available simulator devices
     """
     try:
+        # Remove "iOS" filter to show all runtimes including iOS 26.0+
         result = subprocess.run(
-            ["xcrun", "simctl", "list", "devices", "available", "iOS"],
+            ["xcrun", "simctl", "list", "devices", "available"],
             capture_output=True,
             text=True,
             timeout=10
@@ -158,7 +159,7 @@ def list_simulators() -> str:
         if result.returncode != 0:
             return f"❌ Failed to list simulators: {result.stderr}"
 
-        # Parse and format the output
+        # Parse and format the output - filter for iOS devices only
         lines = result.stdout.split('\n')
         devices = [line.strip() for line in lines if 'iPhone' in line or 'iPad' in line]
 
