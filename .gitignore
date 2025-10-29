@@ -45,3 +45,10 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Snapshot test artifacts
+__Snapshots__/
+**/__Snapshots__/
+
+# Temporary files
+*.backup

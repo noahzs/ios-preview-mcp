@@ -20,7 +20,8 @@ def build_and_screenshot(
     scheme: str,
     test_target: str,
     device: str = "iPhone 15 Pro",
-    snapshots_dir: str = "./__Snapshots__"
+    snapshots_dir: str = "./__Snapshots__",
+    record: bool = False,
 ) -> str:
     """
     Build a SwiftUI view and capture its screenshot using swift-snapshot-testing.
@@ -32,6 +33,7 @@ def build_and_screenshot(
         test_target: Name of the test target containing ViewSnapshotTests
         device: iOS Simulator device name (default: "iPhone 15 Pro")
         snapshots_dir: Directory where snapshots are stored (default: "./__Snapshots__")
+        record: When true, runs in snapshot record mode to refresh baselines
 
     Returns:
         Absolute path to the captured screenshot PNG file
@@ -77,6 +79,10 @@ def build_and_screenshot(
 
         # Run the specific snapshot test
         print(f"📱 Running test on {device}...")
+        env = os.environ.copy()
+        if record:
+            env["SNAPSHOT_RECORD_MODE"] = "1"
+
         result = subprocess.run(
             [
                 "xcodebuild", "test",
@@ -87,7 +93,8 @@ def build_and_screenshot(
             ],
             capture_output=True,
             text=True,
-            timeout=180
+            timeout=180,
+            env=env,
         )
 
         # Check for build/test failure
@@ -166,7 +173,7 @@ def list_simulators() -> str:
         if not devices:
             return "No iOS simulators found. Install simulators via Xcode preferences."
 
-        return "Available iOS Simulators:\n" + "\n".join(f"  • {device}" for device in devices[:20])
+        return "Available iOS Simulators:\n" + "\n".join(f"  • {device}" for device in devices)
 
     except Exception as e:
         return f"❌ Error listing simulators: {str(e)}"
