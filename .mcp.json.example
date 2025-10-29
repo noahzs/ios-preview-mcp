@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "ios-preview": {
+      "command": "/Users/Noah/.local/bin/uv",
+      "args": [
+        "run",
+        "--with",
+        "fastmcp",
+        "/Users/Noah/Documents/GitHub/ios-preview-mcp/server.py"
+      ]
+    }
+  }
+}
